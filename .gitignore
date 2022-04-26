@@ -1,0 +1,7 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+**/Artigo_cache/
+**/Artigo_files/
+*.log

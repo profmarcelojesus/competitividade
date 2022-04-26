@@ -1,0 +1,454 @@
+---
+title: |
+  Relação entre a competitividade do agronegócio brasileiro
+  e a resiliência dos Estados
+author:
+- Marcelo Chaves de Jesus
+- Adriana Lampert
+- Rosemar José Hall
+keywords:
+- competividade regional
+- inovação
+- agronegócio
+output:
+  pdf_document:
+    latex_engine: lualatex
+    number_sections: yes
+    includes:
+      in_header: preamble.tex
+  html_document:
+    df_print: paged
+fontsize: 12pt
+geometry: margin=2cm
+papersize: a4
+bibliography: references.bib
+csl: uea-abnt.csl
+abstract: |
+  O objetivo deste estudo é analisar a competividade do agronegócio brasileiro, relacionando indicadores socioeconômicos e ambientais dos Estados com o desempenho das exportações de produtos agropecuários. A competitividade e a resiliência das regiões estão relacionas não apenas com o potencial de gerar excedentes de produção, mas sobretudo, com sua capacidade de inovação e de criar redes de colaboração, além da diversificação de produtos. As desigualdades regionais podem impactar negativamente na resiliência dos Estados, afetando o crescimento econômico do país como um todo. Economias locais e regionais que possuem maior resiliência, em virtude de uma menor dependência de atividades globais, maior diversidade econômica ou determinação para priorizar e realizar mudanças estruturais mais significantes, apresentam vantagem diante de situações de crise. Por meio da Análise de Correlação Canônica, verificou-se se a relação entre os Índices de Competitividade do Agronegócio e os scores do Ranking de Competitividade dos Estados é significativa. Os resultados indicam haver relação entre a Inovação e os indicadores de Vantagem Comparativa Revelada Simétrica, Vantagem Relativa nas Exportações e de Comércio Intraindústria, apesar de a magnitude da relação entre os dois conjuntos de indicadores ser baixa. Espera-se que a análise conjunta dos indicadores de competitividade e de desempenho nas exportações dos produtos agropecuários possa favorecer as avaliações do potencial competitivo dos Estados e orientar políticas de desenvolvimento regionais que considerem as especificidades de cada unidade da federação.
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, warning=FALSE)
+source("scripts/Packages.R", encoding="utf-8", local = knitr::knit_global())
+
+```
+
+```{r etl, cache=TRUE, include=FALSE}
+source("scripts/Carga_tabelas.R", encoding="utf-8", local = knitr::knit_global())
+```
+
+```{r Load, eval=FALSE, cache=TRUE, include=FALSE}
+load("C:/Users/chave/OneDrive/R/Competitividade/.RData")
+```
+
+```{r analises, cache=TRUE, include=FALSE}
+source("scripts/Analises.R", encoding="utf-8", local = knitr::knit_global())
+```
+
+```{r resumos, cache=TRUE, include=FALSE, cache.rebuild=TRUE}
+source("scripts/Tabelas_resumo.R", encoding="utf-8", local = knitr::knit_global())
+```
+
+**Palavras-chave**: competividade regional; inovação; agronegócio
+
+# Introdução
+
+A competitividade vem sendo abordada em fóruns de discussão ao redor do mundo como um dos principais parâmetros de avaliação, tanto de empresas ou setores da economia, como de países ou regiões. Dada sua relevância para a análise do desempenho em nível de unidades produtivas, clusters ou unidades geográficas, diversas formas de medição da competitividade foram desenvolvidas ao longo dos anos.
+
+Sob o ponto de vista econômico, a competição pode ser definida como "luta ou rivalidade pela conquista de mercados". Sendo assim, a avaliação da competitividade está relacionada com a ganho e perda, com ocupar o podium, o que implica necessariamente que sempre haverá ganhadores e perdedores em um determinado momento. Variações nas condições internas da entidade e/ou em fatores externos como flutuações de demanda, oferta de insumos, aspectos socioeconômicos, dentre inúmeras influências não controláveis podem afetar sua competitividade.
+
+Buscando mitigar os impactos dos fatores externos, algumas empresas adotam estratégias de cooperação, formando grupos, associações, conglomerados e outras formas de integração. Em nível regional ou nacional os governos também buscam maneiras de aumentar sua resiliência e enfrentar os desafios impostos pelos fatores macroeconômicos e socioambientais, de tal modo que blocos econômicos como a União Europeia, por exemplo, ou mesmo países atuam como empresas "lutando" pela conquista de mercados e rivalizando os demais.
+
+Este estudo procurou analisar a competitividade dos Estados brasileiros por meio de indicadores que demonstram tanto a vantagem comparativa de seus principais produtos como também aspectos socioeconômicos e ambientais. O objetivo da pesquisa foi verificar a relação entre os índices clássicos de competitividade elencados na literatura científica e os indicadores socioeconômicos e ambientais que compõem o Ranking de Competitividade dos Estados de modo a responder à seguinte questão: existe relação entre os índices clássicos de competitividade e os scores de competitividade do Ranking de Competividade dos Estados?
+
+Como será exposto na próxima seção, fatores socioeconômicos como inovação, potencial de mercado, educação, geração e difusão de conhecimento, independência e diversidade econômica, por exemplo, favorecem a resiliência dos Estados aumentando sua capacidade de suportar eventos de crise ou períodos de incerteza. Parte-se do pressuposto de que a análise dos índices de competitividade em conjuntos com índices de socioeconômicos representa melhor o potencial competitivo e a resiliência das unidades da federação.
+
+Para alcançar o obtivo proposto foram selecionados índices de competitividade adotados por autores, tanto em âmbito nacional quanto internacional. Também foram utilizados os scores calculados pelo Ranking de Competitividade dos Estados para análise de sua relação com os índices de competitividade clássicos, por meio de técnicas estatísticas. A terceira seção deste artigo apresenta as fontes de dados utilizadas e os métodos de análise selecionados.
+
+Conforme se observa na quarta seção, a análise de índices clássicos de competitividade evidencia características particulares dos Estados brasileiros que são coerentes com os fatores socioeconômicos e ambientais representados pelos scores do Ranking de Competitividade dos Estados. Na última seção do artigo, esses resultados são discutidos e confrontados com resultados de outros estudos.
+
+# Revisão da Literatura
+
+A discussão teórica sobre competitividade apresentada na sequência considera três pontos de análise. Inicialmente discute-se a relação entre a competitividade e a resiliência. A seguir são elencados os níveis de análise da competitividade e, por último, os índices clássicos de competitividade.
+
+## Competitividade e resiliência
+
+A competitividade é um conceito multifacetado, complexo, multidimensional e relativo cujo entendimento vem da economia da gestão, história, política e cultura, mudando com o tempo. Trata-se da capacidade de um setor ou nação de produzir bens e serviços mantendo produtividade e qualidade relativamente superior aos seus concorrentes nacionais e internos [@maravilhas2019; @waheeduzzaman1996].
+
+Esse conceito pode ser analisado sob o ponto de vista tanto de empresa e indivíduos como pela perspectiva regional ou nacional. Um dos objetivos das nações, por exemplo, é obter sucesso ao lidar com mercados competitivos, proporcionando lucros para as empresas, aumentando sua participação de mercado e melhorando, desta forma, os padrões de vidas de seus cidadãos [@chikan2008; @bhawsar2015].
+
+No mesmo sentido, o termo resiliência é utilizado para caracterizar a capacidade de algumas cidades, regiões e territórios, de gerar, difundir e trocar conhecimento, aproveitando assim seus recursos para construir redes sociais de cooperação e inovar. Isto tem contribuído não só para o crescimento econômico, mas também, para responder aos processos de crises cada vez mais comuns em um mundo globalizado [@mendez-sanchez2007]. De acordo com @peyrache-gadeau2010, regiões ou territórios resilientes são aqueles que conseguem inovar, aprender e reflexionar sobre o futuro, alcançando mais facilmente a capacidade de auto-organização. Portanto, se tornam mais capazes de reagir às perturbações, se adaptando e respondendo de forma criativa aos desafios do mundo globalizado.
+
+@bristow2010 ressalta que a crise global de 2008 ocasionou a elevação da insegurança e acabou dando destaque às vantagens daquelas economias locais e regionais que possuem maior resiliência, em virtude de uma menor dependência de atividades globais, maior diversidade econômica ou determinação de priorizar e realizar mudanças estruturais mais significantes. Esse período deu ênfase à vulnerabilidade de muitas economias regionais aos distúrbios internacionais, bem como às diferenças nas capacidades das regiões de se adaptarem diante de tais pressões. A depender de elementos como grau de abertura a instrumentos financeiros internacionais sofisticados, presença ou não de bolhas imobiliárias e a importância de produtos manufaturados na economia regional os impactos variam quanto ao tempo e a intensidade. Este aumento na percepção de vulnerabilidade tem estimulado a busca de novos caminhos para a resiliência e feito com que as atenções se voltem para a capacidade dos governos em mitigar os impactos dos choques internacionais e dos efeitos da própria intervenção governamental [@christopherson2010].
+
+A inovação, considerada como forte aliada da competitividade, que pode ser entendida como a capacidade de produzir novos produtos e processos com disseminação e uso generalizados, há muito é considerada crítica para o dinamismo econômico de qualquer território [@crescenzi2011]. A inovação tende a estar relacionada a "efeitos de dotação" duradouros que são associados a taxas mais altas de acumulação de capital pelas empresas, salários reais mais altos para as pessoas e rendas *per capita* regionais mais altas que divergem substancialmente de outras regiões por longos períodos [@storper2016, p. 339].
+
+A competitividade das empresas, não depende apenas de uma boa gestão, mas está condicionada também ao conjunto de bens públicos e privados que fogem de seu controle. Um exemplo é a logística, que depende da infraestrutura dos transportes, sistema rodoviário, ferroviário e portos, pois problemas como falhas e atrasos, podem eliminar as vantagens competitivas [@herrera2005]. A maior capacidade de inovação ocorre em países exportadores, pois o processo de adoção de novas tecnologias depende também de pesquisas adaptativas locais. Quando se aumenta a utilização de tecnologias, consequentemente a quantidade ofertada aumenta, levando à redução nos preços dos produtos. Assim, os produtores buscam novas tecnologias com o objetivo de baixar seus custos de produção e adicionar valor, sendo que os primeiros a adotar tais tecnologias obtêm maiores ganhos [@vieirafilho2017].
+
+Por outro lado, dados atuais do sistema agroindustrial brasileiro, demonstram o incremento da capacidade produtiva e tecnológica, bem como inovação nos processos produtivos, investimentos em infraestrutura e mão de obra especializada [@herrera2005]. Para aumentar a competitividade do setor do agronegócio, os investimentos foram voltados ao desenvolvimento de variedades de alto rendimento, associadas às inovações institucionais, aumentando substancialmente a produtividade e proporcionando uma diversificação da agricultura. Outro ponto importante para a evolução verificada se refere às políticas de inovação que visam promover o intercâmbio de conhecimento e acelerar sua difusão, ampliando a produtividade das cadeias agropecuárias [@vieirafilho2017].
+
+@vieirafilho2017 afirmam que as principais variáveis responsáveis pela competitividade agrícola são "a produtividade, o preço relativo dos insumos tradicionais e modernos, o nível de educação dos agricultores, os custos de transação, o desenvolvimento do setor não agrícola e as exportações para o mercado internacional". Além disso, a capacidade gerencial do agricultor é essencial para explorar as vantagens competitivas e ganhos produtivos do conhecimento tecnológico. O conhecimento do produtor quanto ao uso da nova tecnologia não apenas reduz o risco ligado ao fator como também redirecionam as trajetórias mais amplas do segmento fornecedor. Isso ocorre por meio de um efeito de feedback que adapta e melhora a tecnologia à diversidade ambiental e às necessidades dos produtores.
+
+Em resumo, a resiliência e a competitividade das localidades estão relacionadas com a estrutura e diversificação de seu mercado interno, sua dependência de outros mercados, sua capacidade de inovação em produtos e serviços, além de seu potencial para gerar e compartilhar conhecimento, construindo redes de cooperação.
+
+## Níveis de competividade
+
+A literatura científica aponta quatro níveis de avaliação da competitividade: nacional (país), regional (blocos de países ou de unidades intranacionais), setorial (grupos ou clusters de empresas) e individual (firma). De acordo com @fajnzylber1991, apesar do consenso sobre a importância da competitividade internacional, parece não haver consenso na visão dos agentes sobre como deve ser avaliada, quais mercados são relevantes para sua mensuração, qual o nível de agregação de produtos que deve ser considerado e a correta extensão de tempo para levar a efeito a mensuração, além dos indicadores a serem adotados.
+
+@fajnzylber1991 desenvolveu o modelo de mensuração que se baseia na posição competitiva e na eficiência para medir a competitividade dos países que compunham a Organização para a Cooperação e Desenvolvimento Econômico (OCDE) no período de 1978 a 1989. Segundo esses parâmetros, um país seria "mal colocado" quando exportasse bens de baixo dinamismo relativo e seria considerado ineficiente quando, independentemente do tipo de mercadoria, sua parcela de mercado fosse inferior [@fajnzylber1991, p. 139].
+
+Autores como @porter1990 e @krugman1994 entendem que a competitividade em nível nacional está relacionada com a produtividade, embora o último seja tenham criticado a ideia de que os países competem entre si, como se fossem empresas. A partir das definições fornecidas, pode-se inferir que a competitividade nacional representa a capacidade de uma nação de fornecer um ambiente propício para que suas empresas e setores prosperem. O objetivo é ajudar na criação de valor, geração de lucros e ao mesmo tempo elevar a prosperidade nacional.
+
+De acordo com @porter1990, a unidade básica de análise para entender a competição é o setor da economia. A competitividade ao nível setorial, que compreende várias empresas que atuam na produção de bens ou serviços semelhantes, tem sido analisada amplamente. Sua relação com mercados globais, suas forças e fraquezas e posicionamento estratégico, além de sua contribuição para a competitividade nacional são questões exploradas para as quais são apontadas soluções como a articulação entre as empresas, maior investimento em pesquisa e aumento de sua presença internacional [@alon2011; @chandra1998; @mitchell1993; @momaya1998].
+
+No que se refere a nível de firma, é considerada competitiva aquela que tem a melhor capacidade de atender as demandas dos clientes obtendo lucro ou ainda, a capacidade de apresentar ao mercado produtos e serviços que os clientes valorizem mais do que aqueles oferecidos pelos concorrentes. Os principais fatores relacionados com a competitividade das empresas são a liderança em custos, a qualidade e a flexibilidade. Também são apontados como questões chave o papel da liderança, o capital humano e a adoção de tecnologias e melhores práticas de gestão e de produção como automação, qualidade total, benchmarking e *Just In Time* [@cetindamar2013; @chikan2008; @gronhaug2012; @lollar2010].
+
+O nível regional é provavelmente o mais difícil e complexo para se definir a competitividade. Isso porque, nas regiões a competitividade vai além da capacidade de exportação de bens e serviços, se estende e inclui uma variedade de insumos materiais, como infraestrutura, comunicação, habitação e redes sociais [@cellino2002]. Nesse sentido, a localização da região é de extrema relevância para a análise da competitividade, devido ao fato de que as regiões competirão entre si ao atrair empresas e trabalhadores. Dessa maneira, aquelas regiões que estiverem alocadas em um ambiente que possui a força de trabalho e infraestrutura adequada poderão ganhar vantagem competitiva frente as demais regiões [@camagni2002].
+
+## Indicadores de competitividade no agronegócio
+
+A análise da competitividade nos diversos níveis considera os resultados de índices teóricos que se propõem a mensurar principalmente as vantagens comparativas e relativas das empresas, setores, regiões e países. A revisão bibliográfica a seguir aborda os indicadores comumente referidos nos estudos em âmbito nacional e internacional.
+
+### Vantagem comparativa revelada
+
+Um dos principais autores a analisar a competitividade é Bela Balassa (1928-1991) cujos estudos trouxeram importantes contribuições para a análise das vantagens comparativas reveladas entre as nações, diante da abertura dos mercados globais [@benedictis2001]. Segundo @balassa1965, o desempenho das exportações de setores individuais em um determinado país pode ser avaliado comparando sua participação relativa nas exportações mundiais de commodities individuais e indicando mudanças na participação relativa ao longo do tempo.
+
+Tendo sido inicialmente concebido para medir a competitividade dos países, o índice de vantagem comparativa revelada de Balassa (RCA em inglês ou IVCR em português) já foi adotado também para análises em nível intranacional. Por exemplo, @hasan2009 estudou o potencial de crescimento em pequenas e médias empresas no distrito de Bangkalan na Indonésia. @amighini2011 investigaram a evolução dos padrões de especialização para as províncias italianas ao longo do período 1995-2005, analisando a dinâmica da distribuição setorial por meio do índice, enquanto @granabetter2016 o utilizou para analisar o desempenho das exportações no distrito de Burgerland, Áustria entre anos de 2010 e 2014.
+
+A ideia básica da Teoria das Vantagens Comparativas é que mesmo que um local não possua vantagem absoluta em relação a qualquer bem, ainda poderá obter vantagens no comércio internacional se, em termos relativos, a produtividade dos demais agentes for diferente. Sendo assim, o Índice de Vantagem Comparativa Revelada (IVCR) revela se um determinado país ou Estado possui vantagem comparativa no comércio de um determinando produto ou setor, o que pressupõe eficiência na comercialização e especialização.
+\newpage
+O IVCR é expresso por:
+
+\begin{equation}
+\label{ivcr}
+IVCR_{ij} = \frac{\left(\frac{X_{ij}}{X_i}\right)}{\left(\frac{X_{wj}}{X_w}\right)}
+\end{equation} onde:
+
+• $X_{ij}$ = valor das exportações locais do produto $j$;
+
+• $X_i$ = total das exportações locais;
+
+• $X_{wj}$ = valor das exportações nacionais do produto $j$;
+
+• $X_w$ = total das exportações nacionais.
+
+Se:
+
+$IVCR < 1$ → não possui vantagem comparativa revelada.
+
+$IVCR > 1$ → possui vantagem comparativa revelada.
+
+$IVCR = 1$ → não possui vantagem e nem desvantagem comparativa.
+
+@laursen1998 apontou uma limitação no índice de vantagem comparativa de Balassa uma vez que os resultados variam entre 0 e 1, e entre 1 e infinito. Como solução sugeriu então um ajuste de modo que o indicador se torne normalizando. Sendo assim o Índice de Vantagem Comparativa Simétrica (VCRS), conforme proposto por Laursen (1998), é dado pela expressão a seguir:
+
+```{=tex}
+\begin{equation}
+\label{vcrs}
+VCRS_{ij} = \frac{IVCR_{ij}-1}{IVCR_{ij}+1}
+\end{equation}
+```
+O índice VCRS varia de forma linear entre -1 e 1, de modo que resultados superiores a 0 indicam vantagem comparativa nas exportações do produto analisado pelo local. Se o VCRS for igual a zero, a competitividade do local se iguala à média dos demais exportadores enquanto valores entre -1 e 0, demonstram desvantagem comparativa revelada [@laursen2015].
+
+### Vantagem relativa na exportação
+
+Além das medidas de participação de mercado, duas medidas baseadas no histórico comercial geral de uma localidade podem revelar mais sobre sua competitividade: os índices de vantagem relativa na exportação e competitividade revelada. Tais índices podem demonstrar o comportamento das exportações de um produto por um país em comparação com todos os outros produtos e como uma localidade se compara a outra e ao resto do mundo [@vollrath1989].
+
+Os índices de vantagem relativa facilitam comparações entre as vantagens na exportação (que têm um sinal positivo) e as desvantagens na exportação (que têm um sinal negativo). Para chegar a um número de índice final para a competitividade revelada, subtrai-se a vantagem relativa na importação do setor de sua vantagem relativa na exportação [@vollrath1989].
+
+Os índices de Vantagem Relativa nas Exportações (VRE) e Competitividade Revelada (CR) são representados pelas expressões (3) e (4) a seguir.
+
+```{=tex}
+\begin{equation}
+\label{vre}
+VRE_{ij} = ln\left[\frac{\frac{X_{ij}}{X_{ir}}}{\frac{X_{ir}}{X_{wr}}}\right]
+\end{equation}
+```
+```{=tex}
+\begin{equation}
+\label{cr}
+CR_{ij} = ln\left[\frac{\frac{X_{ij}}{X_{ir}}}{\frac{X_{ir}}{X_{wr}}}\middle/\frac{\frac{M_{ij}}{M_{ir}}}{\frac{M_{ir}}{M_{wr}}}\right]
+\end{equation}
+```
+onde:
+
+• $X_{jr}$ → total das exportações do produto j excluindo o local $i$;
+
+• $X_{ir}$ → valor das exportações locais excluindo o produto $j$;
+
+• $X_{wr}$ → total das exportações excluindo as exportações do produto $j$; e
+
+• $M$ → valor das importações.
+
+### Índice de comércio intraindústria
+
+De acordo com @bojnec2001 as medidas de vantagem comparativa, os padrões nos fluxos de comércio e na especialização do comércio são determinados por fatores de oferta e demanda. Nesse sentido, além da participação relativa nas exportações, aspectos como a concentração dos mercados em poucos produtos ou destinos e a existência de fluxos de comércio intra e intersetorial impactam a competitividade das localidades. @grubel1975 fizeram uma contribuição substancial para o estudo dos determinantes dos fluxos de comércio intraindústria versus interindústria [@greenaway1984; @loertscher1980].
+
+A concepção de indústria pode considerar a agregação de produtos que, de acordo com características comuns, são classificados nos mesmos níveis de agregação por organismos internacionais como a União Europeia e a Organização Mundial do Comércio. O comércio intraindústria é definido como o valor das exportações de um setor que corresponde exatamente às importações do mesmo setor. O comércio interindustrial é definido como valor do comércio total remanescente após a subtração das exportações ou importações líquidas da indústria [@grubel1975, p. 20].
+
+A análise comparativa do índice de comércio intraindústria de Grubel e Lloyd (GL) entre localidades como Estados ou países se dá pela seguinte expressão:
+
+```{=tex}
+\begin{equation}
+\label{gl}
+GL_{i} = \frac{\sum{[(X_{ij}+M_{ij})-|X_{ij}-M_{ij}|}]}{\sum{(X_{ij}+M_{ij})}}
+\end{equation}
+```
+onde $X$ e $M$ representam respectivamente o valor das exportações e importações do setor $j$ e do local $i$, enquanto $(X_{ij} + M_{ij})$ indica o comércio total do setor $j$, $(X_{ij} + M_{ij}) - |X_{ij} - M_{ij}|$ representa o comércio intraindústria e $|X_{ij} - M_{ij}|$ representa o comércio interindústria. Uma vez que o nível de comércio interindustrial é sempre dado por 1 menos o nível de comércio intraindústria, o foco da análise se concentra no comércio intraindústria [@grubel1975, p. 20].
+
+### Coeficientes de concentração das exportações
+
+O índice de diferença média de de Gini (DMG) foi introduzido pela primeira vez por Corrado Gini em 1912 como uma medida alternativa de variabilidade. O DMG e os parâmetros dele derivados (como o coeficiente ou índice de concentração de Gini) são usados na análise de distribuição de renda há quase um século [@yitzhaki2013]. Um aparente equívoco histórico, que foi motivo do protesto de Albert Hirschman publicado na *The American Economic Review*, atribui a Gini o índice de concentração do comércio desenvolvido e publicado por Hirschman em seu livro *National Power and the Structure of Foreign Trade* em 1945 [@hirschman1964].
+
+@hirschman1964 afirma que se referiu longamente em seu livro ao importante trabalho dos estatísticos italianos sobre medição da concentração e, particularmente, a Gini, contudo ao elaborar o índice, tendo examinado cuidadosamente a literatura pertinente, porque suspeitava fortemente que uma medida tão simples já poderia ter ocorrido a alguém, não encontrou nenhum paralelo. Assim sendo, a expressão equivocadamente citada como índice de Gini-Hirschman na verdade deve ser atribuída, de acordo com o próprio autor, apenas a @hirschman1945.
+
+O índice de @hirschman1945 [p. 159] para o cálculo de concentração do comércio de determinada localidade por destino e por agregação de produtos pode ser representado pelas seguintes expressões:
+
+```{=tex}
+\begin{equation}
+\label{icp}
+ICP_{i} = \sqrt {\sum {\left[\frac{X_{ij}}{X_{i}}\right]^2}}
+\end{equation}
+```
+e,
+
+```{=tex}
+\begin{equation}
+\label{icd}
+ICD_{i} = \sqrt {\sum {\left[\frac{X_{ik}}{X_{i}}\right]^2}}
+\end{equation}
+```
+onde $X_{ik}$ = valor das exportações do local $i$ para o destino $k$.
+
+Segundo @hirschman1945 a concentração do comércio de um país depende do número de países com os quais negocia e na maior ou menor igualdade na distribuição deste mercado entre esses países. As importações ou exportações de um país de (ou para) outros países, pode ser expressa como um percentual do total dessas operações. Quando empregado para analisar a concentração por país de destino, um índice igual 1 (100%) indica uma situação de monopólio das exportações ou importações para um único país enquanto um índice igual a 0 indica um número infinito de países que possuem cada qual uma infinitamente pequena participação no comércio internacional do país em exame.
+
+## Ranking de competitividade dos Estados
+
+Segundo Tadeu Barros, Diretor Executivo do Centro de Liderança Política (CLP), o Ranking de Competitividade dos Estados (RCE) foi concebido em 2011, com o desenvolvimento técnico a cargo da *Economist Intelligence Unit*. O intuito de sua criação foi "gerar diagnósticos e direcionamentos para a atuação dos líderes públicos estaduais. O ranking, composto por 10 pilares temáticos, possibilita identificar quais são os pontos fortes e fracos que influenciam a classificação final do Estado em cada um dos 69 indicadores contemplados [@clp2020].
+
+O ranking consiste na classificação de cada Estado brasileiro de acordo com seu desempenho nos pilares infraestrutura, sustentabilidade social, segurança pública, educação, solidez fiscal, eficiência da máquina pública, capital humano, sustentabilidade ambiental, potencial de mercado e inovação. Aliado à vontade política, o RCE é uma poderosa ferramenta para balizar as ações dos governos estaduais e apoiar a elaboração de políticas baseadas em evidências. Com ele, o desafio da construção de um Estado com elevados padrões socioeconômicos se torna mais factível. A competitividade de um Estado está diretamente ligada à capacidade de ação dos seus líderes públicos. O ranking veio oferecer as bases para a construção do legado de competitividade para aqueles governos que assim desejam fazer [@clp2020].
+
+O relatório 2020 indica que a seleção dos indicadores prioriza aqueles que atendem a critérios como mensuração de atividades-fim, mensuração objetiva e quantitativa, abrangência e representatividade, incorporação de situações de trade-off (acesso x qualidade x custo), fonte externa e de referência e atualização periódica. Por outro lado, são "evitados indicadores de atividades-meio, índices ad-hoc, (presentes, por exemplo, apenas em estudos pontuais e temporários), pesquisas de opinião, indicadores com interpretação dúbia ou que pudessem carregar algum viés ideológico, sendo as informações utilizadas "provenientes de bases de dados públicas, ou então calculadas com base em informações primárias públicas." [@clp2020].
+
+# Procedimentos metodológicos
+
+Para realização das análises foram obtidos dados referentes às exportações e importações dos Estados brasileiros compreendendo o período entre 2015 e 2020. Os dados foram acessados por meio do site do @ministeriodaeconomia2021 que contém os arquivos de dados brutos separados por ano, bem como as tabelas de classificação. Em seguida, procedeu-se a unificação dos arquivos contendo tanto as exportações como as importações totais por código de Nomenclatura Comum do Mercosul (NCM) e a mesclagem dos registros com a tabela de classificação de produtos do agronegócio.
+
+Para análise dos setores que constituem os agrupamentos de produtos classificados no agronegócio, tomou-se por base a tabela de agrupamentos disponibilizada pelo Ministério da Agricultura Pecuária e Abastecimento por meio do Sistema de Estatísticas de Comercio Exterior do Agronegócio Brasileiro -- AgroStat, conforme o \autoref{quadro1}. Embora outros trabalhos tenham adotado os códigos dos capítulos do Sistema Harmonizado (SH2), observou-se que os agrupamentos do sistema AgroStat apresentam produtos com códigos NCM de diferentes capítulos SH2. Por outro lado, nem todos os produtos, cujos capítulos SH2 são associados ao agronegócio nas publicações, pertencem a esse grupo segundo a classificação do MAPA [@agrostat/mapa2021].
+
+```{r quadro1}
+kbl(quadro1, caption = "Agrupamentos de produtos do agronegócio \\label{quadro1}", col.names = NULL) %>% footnote(general_title = "Fonte: AGROSTAT/MAPA (2021)", general = "") %>% kable_styling(latex_options = c("striped", "hold_position"), full_width = F, font_size = 10)%>% 
+  column_spec(c(1:2), width = "8cm")
+```
+
+Dados referentes aos indicadores socioeconômicos e ambientais foram extraídos do portal do RCE elaborado pelo Centro de Liderança Política (CLP), uma organização privada que tem como objetivo melhorar a qualidade do serviço público, propondo soluções sustentáveis [@clp2020]. Os dados disponíveis compreendem os anos de 2015 a 2020 e se referem a indicadores de distribuídos em 10 eixos, conforme descrito no \autoref{quadro2}.
+
+```{r quadro2}
+kbl(quadro2, caption = "Indicadores de Competitividade dos Estados \\label{quadro2}", col.names = NULL) %>% footnote(general_title = "Fonte: Ranking de Competitividade dos Estados (2020)", general = "") %>% kable_styling(latex_options = c("striped", "hold_position"), full_width = F, font_size = 10) %>% 
+  column_spec(c(1:2), width = "8cm")
+```
+
+Cada eixo é formado pela ponderação de indicadores calculados de acordo com metodologia própria, resultado em 68 indicadores ao todo. A partir dos 10 eixos principais obtém-se o ranking geral de competividade dos estados por meio de uma pontuação em escala de 0 a 100 pontos. Os indicadores selecionados, $\{Bi:i=1,…,m\}$, normalizamos os dados através da seguinte fórmula [@clp2020]:
+
+```{=tex}
+\begin{equation}
+\label{rce}
+Y_i= [(B_i - min_i) / (max_i - min_i)] * 100
+\end{equation}
+```
+onde $max_i$ e $min_i$ são, respectivamente, o limite superior e inferior para o indicador $Y_i$.
+
+## Análise dos índices de competitividade
+
+Os Indicadores de Competitividade do Agronegócio (ICA) foram calculados por meio dos dados de exportações e importações, obtendo-se resultados globais ao nível de UF e setoriais de acordo com os agrupamentos do MAPA [@agrostat/mapa2021].
+
+Os índices em nível de UF e setorial calculados foram:
+
+-   Participação percentual da UF nas exportações e importações do país ano a ano;
+-   Concentração por Produto (ICP);
+-   Concentração por País de Destino (ICD);
+-   Comércio Intraindústria (GL);
+-   Vantagem Comparativa Revelada Simétrica (VCRS);
+-   Vantagem Relativa nas Exportações (VRE); e
+-   Competitividade Revelada (CR).
+
+Os índices setoriais foram calculados considerando-se a relação de cada grupo de produtos (conforme a classificação do MAPA) com os demais produtos exportados ou importados pela UF nos anos entre 2015 e 2020, sendo apresentados ao final os valores médios.
+
+## Análise de correlação
+
+Para verificar a relação entre os ICA e os scores do RCE adotou-se a Análise de Correção Canônica (ACC), que visa identificar e quantificar a associação entre dois conjuntos de variáveis e "permite que, dentre as variáveis preditoras, sejam identificadas aquelas estatisticamente significantes para explicar o comportamento do conjunto de variáveis dependentes" [@favero2017].
+
+A ACC converte as variáveis originais dos dois conjuntos em variáveis canônicas que maximizam a relação linear entre as variáveis consideradas em conjunto. A hipótese do modelo teórico da ACC é dada por:
+
+```{=tex}
+\begin{equation}
+\label{acc}
+Y_1 + ⋯ + Y_p = f(X_1 + ⋯+ X_q )
+\end{equation}
+```
+onde $Y$ e $X$ representam, respectivamente as variáveis dependentes e explicativas do modelo, sendo $p$ o número de possíveis variáveis dependentes e $q$ o número de possíveis variáveis independentes.
+
+Embora seja preferível que as variáveis apresentem uma relação de dependência, a análise não implica que essa relação seja explícita. Sendo assim, tanto os scores do RCE quantos os ICA poderiam ser considerados como variáveis dependentes, uma vez que a classificação de variáveis como dependentes ou independentes é de pouca importância para a estimação estatística das funções canônicas, pois a análise de correlação canônica pondera ambas as variáveis estatísticas para maximizar a correlação e não enfatiza qualquer variável estatística em particular [@hairjr2009].
+
+Nesse estudo assumiu-se que os ICA podem ser explicados em parte pelo RCE de modo que o percentual total de variância explicada dos índices de competitividade pelos scores do Ranking, chamado de medida de redundância total (MRT), seja significativo. Seguindo @hairjr2009, a seleção das variáveis estatísticas para análise considerou três critérios: o nível de significância, a magnitude da correlação canônica e a medida de redundância.
+
+O nível de significância entre as correlações canônicas foi testado por meio do teste Lambda de Wilks usando a aproximação F de Rao ao nível de significância de 95%. A magnitude da correlação foi medida pela correlação entre as variáveis independentes e cada variável canônica $u_n$ e entre as variáveis dependentes e cada variável canônica $v_n$, ambas com $n = 1, ..., 6$. Já a MRT foi obtida pela estimação do percentual de variância explicada a partir dos dois conjuntos de dados [@favero2017].
+
+Tanto a importação das tabelas de dados quanto as demais operações necessárias para a análise foram realizadas por meio do software R [@rcoreteam2021], sendo a análise de correlação canônica efetuada com base no pacote CCA: Canonical Correlation Analysis versão 1.2.1 [@gonzalez2021] e os testes de significância obtidos pelo pacote CCP: Significance Tests for Canonical Correlation Analysis (CCA) [@menzel2012].
+
+# Resultados da análise
+
+Os Estados brasileiros apresentam diferentes especialidades em termos de produtos comercializados internacionalmente, áreas destinadas à produção agropecuária e níveis de produtividade, conforme se observa a seguir. A \autoref{tabela1} demonstra que os Estados do Mato Grosso, Paraná e Rio Grande do Sul são os campeões em área destinada a atividade agrícola, enquanto os maiores índices de produtividade em Kg/ha encontram-se no Distrito Federal, em Santa Catarina e em Sergipe.
+
+```{r Tabela1}
+kbl(tabela1, caption = "Dados de área plantada, produtividade e produção agropecuária por UF \\label{tabela1}", 
+    col.names = c("UF", "Área Plantada (mil ha)", "Produtividade (t/ha)", "Produção (mil t)"), 
+    align = c("c","r","r","r"), valign = "c") %>%
+  footnote(general_title = "Fonte: CONAB (2021)", general = "") %>%
+  kable_styling(latex_options = c("striped", "hold_position"), full_width = F, font_size = 10) 
+```
+
+Os Estados brasileiros apresentam diferenças não apenas em aspectos geopolíticos, mas também em aspectos relacionados a produção e sua capacidade de geração de riquezas a partir dos bens que produzem. Em relação aos montantes totais de exportações, os Estados que se destacaram no período entre 2015 e 2020 foram São Paulo (23,43%), Rio de Janeiro (10,27%) e Minas Gerais (11,90%). São Paulo e Rio de Janeiro também concentram os maiores volumes em importações, 35,99% e 10,30% respectivamente (vide \autoref{tabela2}).
+
+```{=tex}
+\newpage
+\blandscape
+```
+```{r Tabela2}
+options(knitr.kable.NA = '-')
+capt <- "Distribuição percentual de exportações dos setores do agronegócio por UF \\label{tabela2}"
+kbl(dbSetoresRes[order(dbSetoresRes$SETOR),-29], caption = capt, 
+    digits = 1, valign = "c") %>% column_spec(1, width = "3.5cm") %>% 
+  kable_styling(full_width = F, font_size = 8, 
+                latex_options = c("striped", "hold_position", "scale_down"))
+```
+
+```{=tex}
+\elandscape
+\newpage
+```
+Uma característica analisada pela literatura sobre competitividade diz respeito ao grau de concentração das localidades em relação os produtos e serviços que compõem seu produto interno. Na \autoref{tabela3} pode-se observar que as exportações de produtos do agronegócio, consideradas como indicadores de competitividade, concentram-se ou poucos produtos na maioria das unidades da federação.
+
+Considerando-se os setores com maior volume de exportações em cada UF, apenas 7 deles correspondem a 45,76% das exportações do agronegócio no período. Os produtos do complexo soja por exemplo, representam os maiores volumes de exportações em 11 das 27 unidades da federação. Tais números indicam índices de concentração elevados ao nível Estadual, embora represente também um indicativo de que o país como um todo esteja concentrando suas exportações de produtos agrícolas.
+
+```{r Tabela3}
+capt <- "Principais grupos de produtos exportados por UF \\label{tabela3}"
+kbl(tabela3[,1:8], valign = "c", align = c("l", "l", "r", "r", "r", "r", "r", "r"), 
+    caption = capt, col.names = c("UF", "SETOR", 2015:2020)) %>% 
+  column_spec(2, width = "5cm") %>% 
+  collapse_rows(columns = 1, valign = "middle") %>% 
+  kable_styling(full_width = F, font_size = 9, 
+                latex_options = c("striped", "hold_position", "scale_down"))
+
+```
+
+Por outro lado, análises mais abrangentes, como a que é proposta pelo RCE e que englobam indicadores econômicos, sociais e ambientais, permitem observar que os Estados brasileiros são menos homogêneos. Na \autoref{grafico1} se observa que Estados como São Paulo, Santa Catarina e Paraná, além do Distrito Federal apresentaram desempenho superior, de acordo com os scores do RCE, no período de 2015 a 2020. Contundo, unidades menos centrais e fora do eixo Sul-Sudeste obtiveram resultados relevantes, como é o caso do Mato Grosso do Sul, por exemplo.
+
+
+```{r Plot RCE, fig.cap="Ranking Geral de Competividade dos Estados de 2005 a 2020 \\label{grafico1}"}
+cores <- c("brown3", "deepskyblue3", "coral", "cornflowerblue", "aquamarine3", "cadetblue") 
+RCE %>% ggplot(aes(x = UF, y = RG, fill = as.factor(ANO))) + 
+  geom_bar(position="stack", stat = "identity") + 
+  scale_fill_brewer(palette="BrBG", name = "ANO")+
+  theme(legend.position="bottom", plot.title = element_text(hjust = 0.5))+
+  labs(caption = "Fonte: CLP (2021)")
+  # scale_fill_manual(values = cores)
+```
+
+
+A \autoref{tabela4} apresenta a Matriz de Indicadores contendo a média dos scores do RCE e dos ICA demonstrando os maiores (em azul) e os menores (em vermelho) valores para cada Estado. É possível observar que a área superior concentra as UFs com melhores colocações no Ranking Geral (RG) e apresenta também valores superiores na maioria dos scores dos pilares. Destaque para os Estados do Ceará, Amazonas e Pará cujos scores em Solidez Fiscal (SF) foram superiores a 80 e Roraima (87,78 no pilar Potencial de Mercado (PM)), apesar de encontrarem-se na parte inferior do ranking na classificação geral.
+
+```{r Tabela4, echo=FALSE}
+capt <- "Matriz de Indicadores \\label{tabela4}"
+tabela4 %>%
+  kbl("latex", caption = capt,row.names = F,
+      escape = F, booktabs = F, align = "c")%>%
+  kable_styling(full_width = F, font_size = 10,
+                latex_options = c("hold_position", "scale_down")) 
+# %>% kableExtra::footnote(general = nota)
+```
+
+Quanto aos ICA, verificou-se uma maior variabilidade ao longo das posições do ranking, com destaque para o índice de Competitividade Revelada (CR), cujos maiores valores calculados encontraram-se nos Estados do Rio Grande do Norte (0,86), Pará (0,81), Amapá (0,66) e Maranhão (0,60) que obtiveram classificações inferiores a 42 pontos no RCE. De acordo com a Tabela 3, os principais produtos do agronegócio exportados por esses Estados foram Frutas (incluindo nozes e castanhas), Complexo Soja, Produtos Florestais e Complexo Soja, respectivamente. Ocupando a primeira colocação no RCE, São Paulo foi o único Estado que apresentou índices de Vantagem Comparativa Revelada Simétrica (VCRS) e Vantagem Relativa nas Exportações (VRE) superiores a 0, estando seu maior volume de exportações de produtos do agronegócio concentrado no Complexo Sucroalcooleiro.
+
+Os índices de comércio intraindústria calculados apontaram que os Estados de São Paulo (0,26), Rio de Janeiro (0,25) e Amazonas (0,24) foram as unidades da federação com maior nível de negociação de produtos entre setores. No caso dos dois primeiros, esses índices, acompanhados pelo Índice de Concentração por Produtos (ICP) abaixo de 0,5 (0,43 e 0,45, respectivamente) indicam uma situação favorável para a competividade global das UFs. Pará (0,43) e Ceará (0,45) apresentaram resultados similares para ICP. O principal setor dentre os produtos do agronegócio exportados pelo Estado fluminense é o de Produtos Florestais enquanto os amazonenses se destacam no setor de Bebidas. São Paulo obteve ainda o melhor resultado também em relação ao Índice de Concentração por Destino (ICD) com o menor valor observado entre os Estados (0,24), seguido por Santa Catarina (0,27) e Minas Gerais (0,28). 
+
+Um vez que a análise visual da Tabela 4 não perece suficiente para confirmar a relação entre  ICA e RCE, a ACC foi empregada para testar a significância, a magnitude e a redundância das relações entre os dois conjuntos de variáveis. O primeiro passo, consistiu no teste de correlação dentro de cada grupo e de correlação cruzada entre os grupos, conforme ilustrado na Figura 2. Considerando-se que as cores azul e vermelho indicam correlações positivas e negativas, respectivamente, é possível constatar a ocorrência de correlações tanto intra, quanto inter conjuntos de variáveis. Principalmente a ocorrência de correlação cruzada é uma condição para que verificar a validade da aplicação da ACC.
+
+```{r correlação, fig.cap="Correlação entre as variáveis \\label{figura2}", fig.align='center', fig.dim= c(4, 4), cache=TRUE}
+img.matcor(correl, type = 2)
+```
+
+Após o cálculo das correlações entre as variáveis originais, procedeu-se a estimação dos pares de variáveis estatísticas (canônicas) que representam o melhor ajustamento dos eixos ortogonais (máxima correlação) entre os dois conjuntos de variáveis. Observando-se as correlações cruzadas entre as variáveis (quadrante inferior esquerdo da Tabela 5) é possível evidenciar o relacionamento entre os scores de Inovação e os índices de Vantagem Comparativa Revelada Simétrica, de Vantagem Relativa nas Exportações e de Comércio Intraindústria. Por outro lado, os dados permitem inferir que pode existir uma relação entre a Eficiência da Máquina Pública e os índices de Concentração as Exportações, tanto por produto quanto por destino.
+
+```{r tabela5}
+options(knitr.kable.NA = '')
+
+kbl(tabela5, "latex", escape = F, align = "r",
+    caption = "Matriz de correlação entre variáveis padronizadas \\label{tabela5}")%>%
+  kable_styling(font_size = 10, latex_options = c("striped", "hold_position", "scale_down")) 
+```
+
+Como se verifica na \autoref{tabela8}, apenas a correlação entre as variáveis u6 e v6 encontra-se abaixo de 0.5, considerando-se as 6 dimensões permitidas, não sendo possível determinar ainda o modelo que melhor representa a relação entre os grupos de variáveis.
+
+```{r print_ca}
+kbl(tabela8, caption = "Correlações canônicas entre as variáveis estatísticas \\label{tabela8}", 
+    digits = 4, linesep = "")%>%
+  kable_styling(full_width = F, font_size = 10, 
+                latex_options = c("striped", "hold_position")) 
+```
+ 
+A significância das correlações canônicas, medida pelo teste Lambda de Wilks (\autoref{tabela9}) indica que ao menos uma das correlações entre os pares de variáveis de 1 até 6 é significativamente diferente de 0, enquanto a significância entre os pares de 2 até 6 indica que nenhuma correlação entre eles é diferente de 0 ao nível de 5%. Isso demonstra que o primeiro modelo deve ser considerado nas análises.
+
+```{r tabela9}
+kbl(tabela9, caption = "Lambda de Wilks com aproximação F de Rao \\label{tabela9}", 
+    digits = 4, escape = F)%>%
+  kable_styling(full_width = F, font_size = 10, 
+                latex_options = c("striped", "hold_position")) %>% 
+  footnote(symbol = "Significante ao nível de 95% de confiança")  
+```
+Uma vez determinado o par de variáveis canônicas significativas, a estimação das correlações entre as variáveis originais e as variáveis estatísticas demonstrou que as variáveis GL, VCRS e VRE foram as que melhor se ajustaram à variável canônica v1. Já a correlação cruzada indicou que a variável Inovação foi a que mais se correlacionou com a variável v1 (\autoref{tabela10}).
+
+```{r tabela10}
+kbl(tabela10, caption = paste("Correlação entre as variáveis padronizadas", 
+                              "e as variáveis canônicas independentes \\label{tabela10}"), 
+    digits = 4, escape = F)%>%
+  kable_styling(full_width = F, font_size = 10, 
+                latex_options = c("striped", "hold_position")) %>% 
+  row_spec(6, extra_css = "border-bottom: 2px solid") %>% 
+  row_spec(c(1:5,7:13), extra_css = "border-bottom: none") %>% 
+  column_spec(1:6, border_left = F)
+```
+
+Por sua vez, a Tabela 9 demonstra que as mesmas variáveis foram as mais bem ajustadas ao modelo canônico, ainda que em níveis superiores de correlação no caso das variáveis dependentes e pouco inferior no caso da variável Inovação. Assim sendo, os dados parecem indicar que a relação entre RCE e ICA está ligada à relação entre a Inovação e os índices de Vantagem Comparativa Revelada Simétrica, Vantagem Relativa nas Exportações e de Comércio Intraindústria.
+
+>> Tabela 9 - Correlação entre as variáveis padronizadas e as variáveis canônicas dependentes
+
+Embora tenha se identificado uma relação entre as variáveis e aquelas que melhor explicam a variabilidade dos indicadores, os índices de redundância apresentados na Tabela 10 evidenciam que apenas 27,11% da variância total do modelo pode ser explicada pelas variáveis canônicas u1v1, o que era de se esperar já que o desempenho competitivo no agronegócio poder ser analisado considerando-se vários fatores não contemplados pelo ranking dos Estados.
+
+>> Tabela 10 - Índices de redundância das variáveis canônicas
+
+A relação entre os indicadores de competitividade, sobretudo aqueles considerados como fatores-chaves para aumentar a resiliência das localidades como a Inovação e diversificação dos produtos e mercados alcançados, pode ser constatada pela aproximação entre os scores RCE e ICA, como pode-se observar na Figura 3.
+
+>> Figura 3 - Distribuição das variáveis RCE e ICA de acordo com as dimensões principais
+
+Considerando-se que a dimensão 1 representa as variáveis canônicas u1v1 e que a dimensão 2 representa as variáveis canônicas u2v2, é possível analisar graficamente a distribuição dos indicadores e perceber quais deles se aproximam. Um ponto notável é a centralidade do Potencial de Mercado em relação a ambas a dimensões, o que indica inexistência de correlação com os modelos canônicos estimados. Também pode-se destacar a proximidade deste indicador e o índice de Competitividade Revelada.
+
+O círculo externo do gráfico à esquerda da Figura 3 abrange os indicadores cuja correlação com as dimensões 1 e 2 foi superior a 0.5. Nessa área encontram-se os índices de Grubel-Lloyde ao lado do score Inovação, de Vantagem Comparativa Revelada Simétrica próximo ao score de Sustentabilidade Ambiental e do índice de Vantagem Relativa nas Exportações e a proximidade entre Educação, Sustentabilidade Social e Capital Humano, embora as correlações desses últimos tenha sido inferir a 0.5.
+
+Também é possível verificar no gráfico à direita o distanciamento entre São Paulo e os demais Estados quanto aos indicadores analisados. Roraima, por exemplo, está no extremo oposto em termos de Índice de Concentração por Destinos, enquanto Mato Grosso apresenta a última posição no que se refere ao nível de Comércio Intraindústria, possivelmente, devido ao fato de suas exportações estarem concentradas basicamente em commodities como soja e milho que são produtos com baixo valor agregado.
+
+# Discussão e conclusões 
+
+Os resultados reforçam as evidências da relação entre inovação e competitividade, sobretudo no que diz respeito à diversificação de produtos e ao nível de interação entre os mercados. No contexto do agronegócio essa relação sugere que os Estados mais inovadores podem entregar uma gama maior de produtos e aumentar o alcance de suas exportações.
+
+Conforme sugerido por @fajnzylber1991, a relação entre os recursos locais, o progresso tecnológico e a sustentabilidade ambiental podem determinar o desempenho competitivo dos países, sendo necessário equilibrar esses fatores. Nesse estudo verificou-se uma relação significativa entre os indicadores estruturais, representados pelos scores do Ranking de Competividade dos Estados e os Índices de Competividade do Agronegócio, apesar de o percentual de explicação destes por aqueles ter se mostrado baixo.
+
+O fato de o conjunto de variáveis analisadas não explicarem a variabilidade do conjunto pode ser justificada pela existência de outras características estruturais e contingenciais específicas de cada Estado que não são captadas pelos scores do ranking. Por outro lado, pode-se argumentar que a análise da competitividade do agronegócio considerando apenas as exportações e importações pode ocultar vantagens comparativas e relativas que podem ser explicadas, por exemplo, pelo consumo interno nacional.
+
+No que se refere à resiliência dos Estados, verificou-se evidência de que os Estados com melhores posições no ranking de competitividade e que apresentam maiores índices de vantagem comparativa, vantagem relativa e comércio intraindústria, são aqueles que apresentam maiores índices de inovação. Esse aspecto é apontado como fator-chave para a resiliência das regiões uma vez que possibilita a diminuição da dependência de recursos externos e o aumento do intercâmbio de conhecimentos com vizinhos e parceiros de comerciais.
+
+Verificou ainda que fatores como Capital Humano, Educação e Sustentabilidade Social estão fortemente relacionados, embora esses aspectos não tenham demonstrado correlação alta com o desempenho competitivo no agronegócio. Esse fato pode ser explicado pelo baixo grau de complexidade e de diversificação dos produtos do agronegócio brasileiro. Por outro lado, com o desenvolvimento tecnológico e aumento de complexidade dos mercados, a demanda por pessoal qualificado para suportar a competitividade do setor deverá ser crescente.
+Continuar a discussão
+
+
+# Referências
